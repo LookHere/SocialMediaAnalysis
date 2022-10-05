@@ -1,0 +1,112 @@
+## This is version 6.  For the most up to date version, visit https://github.com/LookHere/SocialMediaAnalysis
+
+
+#install.packages("tidyverse")
+#install.packages("quanteda")  #https://quanteda.io/articles/quickstart.html
+#install.packages("quanteda.textplots")
+#install.packages("quanteda.textstats")
+#install.packages("wordcloud2")
+#install.packages("devtools")
+#install.packages("wordcloud")
+#install.packages("tm")
+#install.packages("readtext")
+
+library(tidyverse)
+library(tidytext)
+library(quanteda)  
+library(quanteda.textplots)
+library(quanteda.textstats)
+library(RColorBrewer)
+# display.brewer.all()
+library(wordcloud2)
+library(devtools)
+library(wordcloud)
+library(wordcloud2)
+library(tm)
+library(readtext)
+library(SnowballC)
+
+# These are the buckets of a broken out job description. Set "JobSection" to the bucket you want to analyize
+# Descrip  AboutRole  AboutCompany  Requirments  NiceToHave Benefits Diversity 
+JobSection <- 'Requirments'
+
+# Set the working directory
+setwd("D:/CompensationScience/JobDescription")
+
+# bring in the csv file
+CSVFile <- read_csv("JobDescriptions.csv")
+head(CSVFile) 
+str(CSVFile)
+
+# create a corpus
+JobCorpus <- corpus(CSVFile, text_field = JobSection)  ## create the corpus
+JobCorpus
+
+# preprocessing
+CleanText <- JobCorpus |>
+  tokens(remove_punct = T, remove_numbers = T, remove_symbols = T) |>   ## tokenize, removing unnecessary noise
+  tokens_tolower() |>                                                   ## normalize capital letters to lower case
+  #tokens_wordstem() |>                                                  ## stemming (removing word endings) -- Turn this off if you're making a wordcloud
+  tokens_remove(stopwords('en'))  |>                                    ## remove stopwords (English)
+  # These are the common HR words that don't make sense in this analysis
+  tokens_remove(c("s","ll","us","k","make", "full", "days", "including", "company", "business", "world", "full", "covered", "employees", "work", "working", "office", "plan", "time", "great", "program", "weeks", "enjoy", "day", "offices", "group", "organization", "get")) |>  #remove for benefits
+  tokens_remove(c("experience","ability","hr","people","skills", "years", "strong", "high", "talent", "preferred", "team", "employee", "human", "growth", "environment", "excellent", "knowledge", "teams", "resources", "organizaitonal", "building", "demonstrated", "required", "proven", "programs", "written", "highly", "leading", "related", "organizational", "across", "build", "employment", "development", "organizations", "success", "level", "etc", "able", "undertand", "multiple", "relevant", "function", "deep", "managing", "record", "understanding", "track", "scaling", "senior")) |>  
+  tokens_remove(c("levels", "bachelor's", "requirements", "qualifications", "bachelor", "within", "field", "must", "others", "new", "within", "develop", "field", "strongly", "developing", "practices", "expertise", "effective", "role", "needs", "can", "effectivly", "bring", "detail", "best", "understand", "re", "help", "healthcare", "customers" , "like", "join", "one", "everyone", "create", "status", "regard", "place", "products", "without", "creating", "management", "leadership",  "degree")) 
+
+
+############# WORDCOUNT #############
+
+# Shows the number of times each section was in a job description (number of non-NA entries)
+colSums(!is.na(CSVFile))
+
+# put each word on a new row based on column listed in JobSection variable above
+UnNested <- unnest_tokens(tbl=CSVFile, input=JobSection, output=word)
+
+# number of words (including stop words) in each section (number of non-NA entries after unnested)
+colSums(!is.na(UnNested)) # I don't think this is working, maybe hitting the max number?
+
+
+############# MOST POPULAR WORDS #############
+
+# create a document-term matrix (rows are documents and columns are terms)
+dtm <- dfm(CleanText)
+
+# finds the most common words and shows the top 20
+tstat1 <- textstat_frequency(dtm)
+head(tstat1, 20)
+
+# charts the top 20 words
+library("ggplot2")
+ggplot(tstat1[1:20, ], aes(x = reorder(feature, frequency), y = frequency)) +
+  geom_point() +
+  coord_flip() +
+  labs(x = NULL, y = "Frequency")
+
+
+############# KEYWORDS IN CONTEXT #############
+
+
+# This picks out a specific word and show the words before and after it to show how it is used in context
+CSVFileCorpus <- corpus(CSVFile, text_field = JobSection)  ## create the corpus
+CSVFileCorpus <- tokens(CSVFileCorpus)
+kwic(CSVFileCorpus, pattern = "acquisition")
+
+
+############# WORDCLOUD #############
+
+# create a document-term matrix (rows are documents and columns are terms)
+dtm <- dfm(CleanText)
+
+# set the colors
+my.colors<-c(brewer.pal(n = 7, name = 'Set1'))
+
+# Run the wordcloud
+textplot_wordcloud(dtm, max_words = 50, rotation = 0, color = my.colors, font =  "serif")                  
+CP <- textstat_frequency(dtm, n = 50)                                ## view the frequencies 
+
+#Run a different wordcloud
+wordcloud2(CP, size = .3, minRotation = -pi/6, maxRotation = -pi/6, rotateRatio = 1)
+
+#Run another different wordcloud
+letterCloud( CP, size = .3, word = "R for HR", color='random-light' , backgroundColor="transparent")
+
