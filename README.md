@@ -1,7 +1,7 @@
 # SocialMediaAnalysis
 <i> This projects uses social media in an attempt to find HR insights. </i>
 
-Organizations can have people working in different specializations.  Creating a job description for each role helps organize the workforce.  This is often decided based on what the employee is doing (marketing, engineering, etc.) and their level (manager, director, etc.).  A good job descriptions can be used as the foundation of organization design, compensation, and recruiting processes. 
+Organizations  have employees working in different specializations.  Creating a job description for each role helps organize the workforce.  This is often decided based on what the employee is doing (marketing, engineering, etc.) and their level (manager, director, etc.).  A good job descriptions can be used as the foundation of organization design planning, compensation strategies, and recruiting processes. 
 
 This exercise analyzes public job descriptions from multiple organizations to find similarities and differences.  
 - Since the Human Resources division is generally responsible for writing the job descriptions, this exercise began by focusing on job descriptions of Human Resources positions (since HR should understand roles on their own team the most).  
@@ -16,7 +16,7 @@ Each job description had its text manually divided into different categories:
 - Requirements - what traits the candidate needs to be hired
 - NiceToHave - preferred, but not mandatory traits for the candidate
 - Benefits - what the organizations provides to the candidate (healthcare, time off, etc.)
-- Diversity - text (often at the end of the job description) discussing the organizations commitment to fair hiring practices regarding Diversity, Equity, Inclusion, and Belonging or an Equal Opportunity statement
+- Diversity - text discussing the organizations commitment to fair hiring practices regarding Diversity, Equity, Inclusion, and Belonging or an Equal Opportunity statement (often added at the end of the job description) 
 
 Although the manual process of breaking up the text into buckets was imperfect, it should help better identify the context of the word. If the word "Compensation" used in the requirements section, is probably asking the if the candidate has experience in managing compensation plans.  If the word “Compensation” is used in the Benefits or Diversity section, it is probably talking about the compensation that will be paid to this job or the fairness in pay, respectively.
 
@@ -29,12 +29,13 @@ Although the manual process of breaking up the text into buckets was imperfect, 
 - [x] break up job descriptions into buckets
 - [x] find the most common words in those buckets
 - [x] create a wordcloud to visually display the most common words
-- [ ] build something that merges similar terms (Recruiting and Talent Acquisition) 
+- [ ] build something that merges similar terms (like "Recruiting" and "Talent Acquisition") 
 - [ ] compare this to similar roles, like Head of Finance
-- [ ] understand which roles use “years of experience” and if the years are correlated to anything
+- [ ] perform sentiment analysis to see which roles have the most positive phrasing
+- [ ] understand which roles use “years of experience” and what the year correlate to
 - [ ] see which benefits organizations are using to attract candidates
-- [ ] analyze DEIB (Diversity, Equity, Inclusion, and Belonging) statements to see outward facing cultural changes
-- [ ] develop a system to automatically pull this data
-- [ ] develop a system to automatically break the data into the right buckets (or at least help speed up that process)
+- [ ] analyze DEIB (Diversity, Equity, Inclusion, and Belonging) statements to see outward facing cultural values
+- [ ] develop a system to automatically scrape websites to pull in the job descriptions
+- [ ] develop a system to automatically divides the data into the right buckets (or at least help speed up that process)
 
 <kbd><img src="https://github.com/LookHere/SocialMediaAnalysis/blob/main/Files/Images/HeadOfHRWordCloud.jpeg" width=100% height=100%></kbd>
