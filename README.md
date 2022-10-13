@@ -22,16 +22,34 @@ Although the manual process of breaking up the text into buckets was imperfect, 
 
 # Top Words In “Requirements” For Top Level HR Roles:
 
+We can see some common traits across job descriptions when just looking at the “requirements” section of the posting.  Here all stop-words (like “the” or “a”) are removed, in addition to many common HR words (like “days” or  “company”) that would not be useful in the analysis.  
+
+More work needs to be done to combine similar phrases like “Talent Acquisition” and “Recruiting”, which will move them higher on the word count list.
+
 <kbd><img src="https://github.com/LookHere/SocialMediaAnalysis/blob/main/Files/Images/MostCommonWords.jpeg" width=100% height=100%></kbd>
 
-## Project Roadmap
+
+# Sentiment Analysis 
+
+Human Resources as a profession is known to be friendly.  By passing the job descriptions through a rudimentary sentiment analysis we can see which postings use the most positive words.  The format of job descriptions make them easier to run sentiment analysis on since they generally don’t include things like sarcasm and innuendo, which are challenging for the analysis.
+
+At first glance, it’s clear that the longer postings were more positive in total.  (Here the red line is just fitting a linear model by regression.)
+
+<kbd><img src="https://github.com/LookHere/SocialMediaAnalysis/blob/main/Files/Images/Positivity.jpeg" width=100% height=100%></kbd>
+
+But if we divide the positivity score by the number of characters, we can see that the average positivity by character is actually higher for the shorter job descriptions.  The trend for longer job descriptions to have fewer positive words per character is one of the many reasons we should try to keep our job descriptions short and to the point.
+
+<kbd><img src="https://github.com/LookHere/SocialMediaAnalysis/blob/main/Files/Images/PositivityByCharacter.jpeg " width=100% height=100%></kbd>
+
+
+# Project Roadmap
 - [x] find a population of job descriptions
 - [x] break up job descriptions into buckets
 - [x] find the most common words in those buckets
 - [x] create a wordcloud to visually display the most common words
+- [x] perform sentiment analysis to see which roles have the most positive phrasing
 - [ ] build something that merges similar terms (like "Recruiting" and "Talent Acquisition") 
 - [ ] compare this to similar roles, like Head of Finance
-- [ ] perform sentiment analysis to see which roles have the most positive phrasing
 - [ ] understand which roles use “years of experience” and what the year correlate to
 - [ ] see which benefits organizations are using to attract candidates
 - [ ] analyze DEIB (Diversity, Equity, Inclusion, and Belonging) statements to see outward facing cultural values
