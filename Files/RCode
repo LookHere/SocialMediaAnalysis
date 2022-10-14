@@ -1,5 +1,5 @@
-## This is version 6.  For the most up to date version, visit https://github.com/LookHere/SocialMediaAnalysis
-
+## This is version 7.  For the most up to date version, visit https://github.com/LookHere/SocialMediaAnalysis
+## I understand this code is very messy and not efficient; this project is just exploratory right now.
 
 #install.packages("tidyverse")
 #install.packages("quanteda")  #https://quanteda.io/articles/quickstart.html
@@ -110,3 +110,57 @@ wordcloud2(CP, size = .3, minRotation = -pi/6, maxRotation = -pi/6, rotateRatio 
 #Run another different wordcloud
 letterCloud( CP, size = .3, word = "R for HR", color='random-light' , backgroundColor="transparent")
 
+
+############# SENTIMENT ANALYSIS #############
+
+library(tm)
+#install.packages("syuzhet")
+library(syuzhet)
+library(lubridate)
+library(ggplot2)
+library(scales)
+#install.packages("reshape2")
+library(reshape2)
+library(dplyr)
+
+# Creating a new corpus because want to include many of the words we excluded above and we want the full text (not just a section like above)
+SACorpus <- iconv(CSVFile$Descrip, "latin1" )
+
+# Creates a dataframe with the number of rows as there are entries in the CSVFile and renames the column to what we'll be counting.
+SAResults <- data.frame(matrix(ncol = 7, nrow = nrow(CSVFile)))
+names(SAResults) <- c("PositiveScore", "NegativeScore", "TrustScore", "WordCount", "PositiveByCount", "NegativeByCount","TrustByCount")
+
+# Run the sentiment analysis on each job and store the results. Also counts the characters in each description and divides each sentiment by the character length.
+i <- 1
+while (i < nrow(CSVFile)) {
+  temp<- get_nrc_sentiment(corpus(SACorpus[i]))
+  SAResults$PositiveScore[i] <- temp$positive
+  SAResults$NegativeScore[i] <- temp$negative
+  SAResults$TrustScore[i] <- temp$trust
+  
+  SAResults$WordCount[i] <- nchar(SACorpus[i])
+  
+  SAResults$PositiveByCount[i] <- SAResults$PositiveScore[i] / SAResults$WordCount[i]
+  SAResults$NegativeByCount[i] <- SAResults$NegativeScore[i] / SAResults$WordCount[i]
+  SAResults$TrustByCount[i] <- SAResults$TrustScore[i] / SAResults$WordCount[i]
+  
+  i <- i + 1
+} 
+
+
+# Remove rows with NA
+SAResults <- na.omit(SAResults) 
+
+
+# Create a chart
+
+ggplot(SAResults, aes(x = WordCount, y = PositiveByCount)) +
+  geom_point(shape = 16, size = 5, show.legend = FALSE, alpha = .4) +
+  theme_minimal() +
+  stat_smooth(method = "lm",
+              col = "#C42126",
+              se = FALSE,
+              size = 1) +
+  labs(title = "Positivity/Characters Relationship", x = "Characters", y = "Positivity by Character") 
+
+  
