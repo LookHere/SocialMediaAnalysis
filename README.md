@@ -1,6 +1,6 @@
 # Social Media Analysis
 <i> This projects uses social media in an attempt to find HR insights. </i>
-(It's still very exploritory right now.)
+(It's still very exploratory right now.)
 
 Organizations  have employees working in different specializations.  Creating a job description for each role helps organize the workforce.  This is often decided based on what the employee is doing (marketing, engineering, etc.) and their level (manager, director, etc.).  A good job descriptions can be used as the foundation of organization design planning, compensation strategies, and recruiting processes. 
 
